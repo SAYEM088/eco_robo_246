@@ -1,6 +1,9 @@
-"use client"
+"use client";
+
 import { useState } from "react";
 import axios from "axios";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function DataUploader() {
   const [formData, setFormData] = useState({
@@ -20,17 +23,33 @@ export default function DataUploader() {
     try {
       const response = await axios.post("/api/post", formData);
       if (response.data.success) {
-        alert("Data submitted successfully!");
+        toast.success("Data submitted successfully!", {
+          position: "top-right",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
         setFormData({ testNo: "", ph: "", ec: "", salt: "", tds: "" });
       }
     } catch (error) {
       console.error("Error submitting data:", error);
-      alert("Failed to submit data");
+      toast.error("Failed to submit data. Please try again.", {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
     }
   };
 
   return (
-    <div className="bg-gray-800 p-14 text-white h-screen ">
+    <div className="bg-gray-800 p-14 text-white h-screen">
       <h2 className="text-red-500 font-bold text-xl mb-4">Uploader</h2>
       <form onSubmit={handleSubmit}>
         {["testNo", "ph", "ec", "salt", "tds"].map((field) => (
@@ -52,6 +71,7 @@ export default function DataUploader() {
           Submit
         </button>
       </form>
+      <ToastContainer />
     </div>
   );
 }

@@ -1,13 +1,24 @@
-"use client"
+"use client";
+
 import { useState, useEffect } from "react";
 import axios from "axios";
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from "recharts";
+import {
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  Legend,
+} from "recharts";
 
 export default function Graph() {
   const [graphData, setGraphData] = useState([]);
   const [selectedMetric, setSelectedMetric] = useState("ph");
+  const [isMounted, setIsMounted] = useState(false); 
 
   useEffect(() => {
+    setIsMounted(true); 
     fetchGraphData();
   }, []);
 
@@ -24,13 +35,18 @@ export default function Graph() {
 
   const metrics = ["ph", "ec", "salt", "tds"];
 
+
+  if (!isMounted) {
+    return null;
+  }
+
   return (
     <div className="bg-gray-200 p-4 h-screen">
       <div className="flex items-center m-10 p-2">
         <select
           value={selectedMetric}
           onChange={(e) => setSelectedMetric(e.target.value)}
-          className="px-6  p-2 bg-gray-300 rounded mr-4"
+          className="px-6 p-2 bg-gray-300 rounded mr-4"
         >
           {metrics.map((metric) => (
             <option key={metric} value={metric}>
